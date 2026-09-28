@@ -27,11 +27,11 @@ async function main(): Promise<void> {
 
   const allEvents = parseIcsFile(config.icsFilePath);
 
-  // Sync only events from 30 days ago through 1 year from today
+  // Sync only events from 90 days ago through 1 year from today
   const now = new Date();
 
   const from = new Date(now);
-  from.setDate(from.getDate() - 30);
+  from.setDate(from.getDate() - 90);
 
   const until = new Date(now);
   until.setFullYear(until.getFullYear() + 1);
