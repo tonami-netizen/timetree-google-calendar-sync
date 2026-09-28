@@ -22,9 +22,28 @@ async function main(): Promise<void> {
 
   // 3. ICS パース
   console.log("Parsing ICS file...");
-  const events = parseIcsFile(config.icsFilePath);
-  console.log(`  Found ${events.length} events in ICS.`);
+  //const events = parseIcsFile(config.icsFilePath);
+  //console.log(`  Found ${events.length} events in ICS.`);
 
+  const allEvents = parseIcsFile(config.icsFilePath);
+
+  // Sync only events from 30 days ago through 1 year from today
+  const now = new Date();
+
+  const from = new Date(now);
+  from.setDate(from.getDate() - 30);
+
+  const until = new Date(now);
+  until.setFullYear(until.getFullYear() + 1);
+
+  const events = allEvents.filter(
+    (event) => event.end >= from && event.start <= until
+  );
+
+  console.log(
+    `  Found ${allEvents.length} events in ICS; ${events.length} within sync window.`
+  );
+  
   // 4. Google Calendar クライアント初期化
   const gcal = new GCalClient(config.googleCredentials, config.googleCalendarId);
 
